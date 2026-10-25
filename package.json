@@ -1,0 +1,35 @@
+{
+  "name": "gantt-project-app",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Aplikasi manajemen proyek Gantt Chart (React + Express + Prisma SQLite)",
+  "type": "module",
+  "workspaces": [
+    "shared",
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "postinstall": "prisma generate --schema server/prisma/schema.prisma",
+    "dev": "npm run build -w shared && concurrently -n server,client -c cyan,magenta \"npm run dev -w server\" \"npm run dev -w client\"",
+    "build": "npm run build -w shared && npm run build -w server && npm run build -w client",
+    "typecheck": "npm run build -w shared && npm run typecheck --workspaces --if-present",
+    "test": "npm run build -w shared && npm run test --workspaces --if-present",
+    "db:migrate": "prisma migrate deploy --schema server/prisma/schema.prisma",
+    "db:seed": "npm run build -w shared && tsx server/prisma/seed.ts",
+    "db:reset": "prisma migrate reset --force --skip-seed --schema server/prisma/schema.prisma && npm run db:seed"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "prisma": "^6.1.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "esbuild@0.21.5": true,
+    "prisma@6.19.3": true,
+    "@prisma/engines@6.19.3": true,
+    "@prisma/client@6.19.3": true
+  }
+}
